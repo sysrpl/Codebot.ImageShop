@@ -1,0 +1,103 @@
+object ImageForm: TImageForm
+  Left = 376
+  Height = 561
+  Top = 250
+  Width = 714
+  Caption = 'Image Node Manipulator'
+  ClientHeight = 561
+  ClientWidth = 714
+  Color = 5391680
+  Font.Color = clWhite
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  Position = poScreenCenter
+  LCLVersion = '2.1.0.0'
+  object RightPanel: TPanel
+    Left = 200
+    Height = 561
+    Top = 0
+    Width = 514
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 561
+    ClientWidth = 514
+    TabOrder = 0
+    object NodePanel: TPanel
+      Left = 0
+      Height = 300
+      Top = 261
+      Width = 514
+      Align = alBottom
+      BevelOuter = bvNone
+      Color = 5391680
+      ParentColor = False
+      TabOrder = 0
+      OnMouseDown = NodePanelMouseDown
+      OnMouseMove = NodePanelMouseMove
+      OnMouseUp = NodePanelMouseUp
+      OnPaint = NodePanelPaint
+      OnResize = NodePanelResize
+    end
+    object ImagePanel: TPanel
+      Left = 0
+      Height = 256
+      Top = 0
+      Width = 514
+      Align = alClient
+      BevelOuter = bvNone
+      Color = 5391680
+      ParentColor = False
+      TabOrder = 1
+      OnPaint = ImagePanelPaint
+      OnResize = NodePanelResize
+    end
+    object Splitter: TSplitter
+      Cursor = crVSplit
+      Left = 0
+      Height = 5
+      Top = 256
+      Width = 514
+      Align = alBottom
+      ResizeAnchor = akBottom
+    end
+  end
+  object LeftPanel: TPanel
+    Left = 0
+    Height = 561
+    Top = 0
+    Width = 200
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 561
+    ClientWidth = 200
+    TabOrder = 1
+    object NodeBox: TListBox
+      Left = 0
+      Height = 561
+      Top = 0
+      Width = 200
+      Align = alClient
+      BorderStyle = bsNone
+      Color = 5391680
+      Font.Color = clWhite
+      ItemHeight = 25
+      OnDrawItem = NodeBoxDrawItem
+      OnMouseDown = NodeBoxMouseDown
+      OnMouseUp = NodeBoxMouseUp
+      Options = []
+      ParentFont = False
+      ScrollWidth = 200
+      Style = lbOwnerDrawFixed
+      TabOrder = 0
+      TopIndex = -1
+    end
+  end
+  object UpdateTimer: TTimer
+    Enabled = False
+    Interval = 50
+    OnTimer = UpdateTimerTimer
+    Left = 80
+    Top = 40
+  end
+end
