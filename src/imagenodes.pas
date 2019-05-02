@@ -1159,7 +1159,8 @@ begin
   P := TPicture.Create;
   try
     P.LoadFromFile(FileName);
-    if UpperCase(ExtractFileExt(FileName)) = '.PNG' then
+    if (P.Graphic is TPortableNetworkGraphic) and
+    	(TPortableNetworkGraphic(P.Graphic).PixelFormat = pf32bit) then
     begin
       FImage.Assign(P.Graphic);
     end
