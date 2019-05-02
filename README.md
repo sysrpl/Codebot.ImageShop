@@ -2,7 +2,7 @@
 A visual node based image manipulation program
 
 # What is Image Shop?
-Image Shop is a small teaching application that allows students to write functions using the Free Pascal langauge and see the results.
+Image Shop is a small teaching application that allows students to write functions using the Free Pascal language and see the results.
 
 After a student write a function, they can run the Image Shop program and drop it on a canvas and connect it to other functions or images. Many functions can be combined to create new and interesteding image effects.
 
