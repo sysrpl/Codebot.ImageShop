@@ -40,7 +40,7 @@ type
     procedure UpdateTimerTimer(Sender: TObject);
   private
     FNodes: TNodeList;
-  	FOperations: TPixelOperations;
+    FOperations: TPixelOperations;
     FBlends: TPixelBlends;
     FNodeBoxDown: Boolean;
     procedure NodesChange(Sender: TObject);
@@ -62,7 +62,7 @@ var
   B: TPixelBlend;
   I: Integer;
 begin
-	FNodes := TNodeList.Create;
+  FNodes := TNodeList.Create;
   FNodes.OnChange := NodesChange;
   FNodes.OnUpdate := NodesUpdate;
   NodeBox.Items.AddObject('Sources', nil);
@@ -71,12 +71,12 @@ begin
   NodeBox.Items.AddObject('Operator Nodes', nil);
   SetLength(FOperations, 100);
   for I := Low(FOperations) to High(FOperations) do
-  	if PixelOperations(I, O) then
+    if PixelOperations(I, O) then
     begin
-			FOperations[I] := O;
+      FOperations[I] := O;
       NodeBox.Items.AddObject(O.Name, TObject(2));
     end
-  	else
+    else
     begin
       SetLength(FOperations, I + 1);
       Break;
@@ -84,12 +84,12 @@ begin
   NodeBox.Items.AddObject('Blend Nodes', nil);
   SetLength(FBlends, 100);
   for I := Low(FBlends) to High(FBlends) do
-  	if PixelBlends(I, B) then
+    if PixelBlends(I, B) then
     begin
-			FBlends[I] := B;
+      FBlends[I] := B;
       NodeBox.Items.AddObject(B.Name, TObject(3));
     end
-  	else
+    else
     begin
       SetLength(FBlends, I + 1);
       Break;
@@ -106,7 +106,7 @@ end;
 
 procedure TImageForm.FormShow(Sender: TObject);
 begin
-	NodeBox.ItemIndex := 3;
+  NodeBox.ItemIndex := 3;
   NodeBox.Invalidate;
 end;
 
@@ -116,7 +116,7 @@ var
   G: TGraphic;
   X, Y: Integer;
 begin
-	B := TBitmap.Create;
+  B := TBitmap.Create;
   try
     B.Width := 20;
     B.Height := 20;
@@ -137,9 +137,9 @@ begin
   end
   else
   begin
-		X := (ImagePanel.Width - G.Width) div 2;
-		Y := (ImagePanel.Height - G.Height) div 2;
-		ImagePanel.Canvas.Draw(X, Y, G);
+    X := (ImagePanel.Width - G.Width) div 2;
+    Y := (ImagePanel.Height - G.Height) div 2;
+    ImagePanel.Canvas.Draw(X, Y, G);
   end;
 end;
 
@@ -161,11 +161,11 @@ begin
   else
   begin
     if Index = NodeBox.ItemIndex then
-	    NodeBox.Canvas.Brush.Color := clStyleHighlight
+      NodeBox.Canvas.Brush.Color := clStyleHighlight
     else
-	    NodeBox.Canvas.Brush.Color := clStyleWindow;
+      NodeBox.Canvas.Brush.Color := clStyleWindow;
     NodeBox.Canvas.FillRect(ARect);
-		NodeBox.Canvas.Font.Color := clStyleText;
+    NodeBox.Canvas.Font.Color := clStyleText;
     ARect.Left := ARect.Left + 8;
     DrawString(NodeBox.Canvas, S, ARect, ImageNodes.dirLeft);
   end;
@@ -175,9 +175,9 @@ procedure TImageForm.NodeBoxMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   if Button <> mbLeft then
-  	Exit;
+    Exit;
   FNodeBoxDown := True;
-	NodeBox.Invalidate;
+  NodeBox.Invalidate;
 end;
 
 procedure TImageForm.NodeBoxMouseUp(Sender: TObject; Button: TMouseButton;
@@ -187,7 +187,7 @@ var
   I, J: Integer;
 begin
   if Button <> mbLeft then
-  	Exit;
+    Exit;
   I := NodeBox.ItemIndex;
   J := NodeBox.TopIndex;
   if I < 0 then
@@ -197,12 +197,12 @@ begin
   if (I = 1) and (S = 'Reset') then
   begin
     if NodeBox.GetIndexAtXY(X, Y) = NodeBox.ItemIndex then
-	  	FNodes.Clear;
+      FNodes.Clear;
     NodeBox.ItemIndex := -1;
   end;
   FNodeBoxDown := False;
   NodeBox.TopIndex := J;
-	NodeBox.Invalidate;
+  NodeBox.Invalidate;
 end;
 
 procedure TImageForm.NodesChange(Sender: TObject);
@@ -221,15 +221,15 @@ procedure TImageForm.NodePanelMouseDown(Sender: TObject; Button: TMouseButton;
 begin
   if Button = mbLeft then
   begin
-  	FNodes.MouseOver(X, Y);
-		FNodes.MouseDown(X, Y);
+    FNodes.MouseOver(X, Y);
+    FNodes.MouseDown(X, Y);
   end;
 end;
 
 procedure TImageForm.NodePanelMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
-	FNodes.MouseOver(X, Y);
+  FNodes.MouseOver(X, Y);
 end;
 
 procedure TImageForm.NodePanelMouseUp(Sender: TObject; Button: TMouseButton;
@@ -241,41 +241,41 @@ var
   I, J: Integer;
 begin
   if Button <> mbLeft then
-  	Exit;
-	I := NodeBox.ItemIndex;
+    Exit;
+  I := NodeBox.ItemIndex;
   if I < 0 then
-	begin
-		FNodes.MouseUp(X, Y);
-  	FNodes.MouseOver(X, Y);
+  begin
+    FNodes.MouseUp(X, Y);
+    FNodes.MouseOver(X, Y);
     Exit;
   end;
   J := NodeBox.TopIndex;
   S := NodeBox.Items[I];
   I := IntPtr(NodeBox.Items.Objects[I]);
   case I of
-  	1:
+    1:
       if S = 'Image' then
-      	TImageNode.Create(FNodes).MoveTo(X, Y)
+        TImageNode.Create(FNodes).MoveTo(X, Y)
       else if S = 'Reset' then
-      	FNodes.Clear;
-		2:
+        FNodes.Clear;
+    2:
       for I := Low(FOperations) to High(FOperations) do
         if S = FOperations[I].Name then
-    		begin
+        begin
           O := TOperationNode.Create(FNodes);
           O.Title := FOperations[I].Name;
           O.Operation := FOperations[I].Proc;
           O.MoveTo(X, Y);
-      	end;
-		3:
+        end;
+    3:
       for I := Low(FBlends) to High(FBlends) do
         if S = FBlends[I].Name then
-    		begin
+        begin
           B := TBlendNode.Create(FNodes);
           B.Title := FBlends[I].Name;
           B.Blend := FBlends[I].Proc;
           B.MoveTo(X, Y);
-      	end;
+        end;
   end;
   NodeBox.ItemIndex := -1;
   NodeBox.TopIndex := J;

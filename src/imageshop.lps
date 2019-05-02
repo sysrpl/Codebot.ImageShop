@@ -8,9 +8,10 @@
         <Filename Value="imageshop.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ImageShop"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="1"/>
         <CursorPos X="12" Y="8"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="main.pas"/>
@@ -19,10 +20,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Main"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="7"/>
-        <CursorPos X="25" Y="41"/>
-        <UsageCount Value="23"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="styles.pas"/>
@@ -31,25 +32,24 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="30"/>
       </Unit2>
       <Unit3>
         <Filename Value="imagenodes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ImageNodes"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="1181"/>
-        <CursorPos X="17" Y="1200"/>
-        <UsageCount Value="23"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="1146"/>
+        <CursorPos X="45" Y="1162"/>
+        <UsageCount Value="30"/>
+        <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="pixels.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Pixels"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="292"/>
-        <CursorPos X="6" Y="216"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
@@ -58,10 +58,10 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
       </Unit5>
     </Units>
-    <JumpHistory Count="2" HistoryIndex="1">
+    <JumpHistory Count="9" HistoryIndex="8">
       <Position1>
         <Filename Value="pixels.pas"/>
         <Caret Line="178" Column="28" TopLine="153"/>
@@ -70,6 +70,32 @@
         <Filename Value="pixels.pas"/>
         <Caret Line="332" Column="20" TopLine="309"/>
       </Position2>
+      <Position3>
+        <Filename Value="pixels.pas"/>
+        <Caret Line="216" Column="6" TopLine="292"/>
+      </Position3>
+      <Position4>
+        <Filename Value="pixels.pas"/>
+        <Caret Line="272" Column="36" TopLine="190"/>
+      </Position4>
+      <Position5>
+        <Filename Value="imageshop.lpr"/>
+        <Caret Line="8" Column="12"/>
+      </Position5>
+      <Position6>
+        <Filename Value="main.pas"/>
+      </Position6>
+      <Position7>
+        <Filename Value="imagenodes.pas"/>
+      </Position7>
+      <Position8>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="1174" TopLine="1139"/>
+      </Position8>
+      <Position9>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="1166" Column="6" TopLine="1144"/>
+      </Position9>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

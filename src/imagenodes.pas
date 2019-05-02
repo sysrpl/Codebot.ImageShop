@@ -11,13 +11,13 @@ uses
 
 type
   TBaseNode = class
-	protected
+  protected
     procedure Changed; virtual; abstract;
     procedure Update; virtual; abstract;
     function GetConnected: Boolean; virtual; abstract;
     function GetImage: TGraphic; virtual; abstract;
-	public
-		procedure Align; virtual; abstract;
+  public
+    procedure Align; virtual; abstract;
     procedure Draw(Canvas: TCanvas); virtual; abstract;
     function  MouseOver(X, Y: Integer): Boolean; virtual; abstract;
     procedure MouseDown(X, Y: Integer); virtual; abstract;
@@ -26,7 +26,7 @@ type
     function Regenerate: Boolean; virtual; abstract;
     property Connected: Boolean read GetConnected;
     property Image: TGraphic read GetImage;
-	end;
+  end;
 
   TChildNode = class;
   TDisplayNode = class;
@@ -47,7 +47,7 @@ type
 { TNodeList }
 
   TNodeList = class(TBaseNode)
-	private
+  private
     FInsert: TPoint;
     FList: TList;
     FHotNode: TChildNode;
@@ -61,20 +61,20 @@ type
     FOnUpdate: TNotifyEvent;
     function GetCount: Integer;
     function GetNode(Index: Integer): TChildNode;
-	public
+  public
     function GetEnumerator: TNodeEnumerator;
-	protected
+  protected
     procedure Add(Node: TChildNode);
     procedure Changed; override;
     procedure Update; override;
     function GetConnected: Boolean; override;
     function GetImage: TGraphic; override;
-	public
+  public
     constructor Create;
     destructor Destroy; override;
     procedure Remove(Node: TChildNode);
     procedure Clear;
-		procedure Align; override;
+    procedure Align; override;
     procedure Draw(Canvas: TCanvas); override;
     procedure Resize(Width, Height: Integer);
     function  MouseOver(X, Y: Integer): Boolean; override;
@@ -88,24 +88,24 @@ type
     property Node[Index: Integer]: TChildNode read GetNode; default;
     property Width: Integer read FWidth;
     property Height: Integer read FHeight;
-		property OnChange: TNotifyEvent read FOnChange write FOnChange;
-		property OnUpdate: TNotifyEvent read FOnUpdate write FOnUpdate;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+    property OnUpdate: TNotifyEvent read FOnUpdate write FOnUpdate;
   end;
 
 { TPinKind }
 
-	TPinKind = (pkInput, pkOutput);
+  TPinKind = (pkInput, pkOutput);
 
 { TNodePin }
 
   TNodePin = class
-	private
+  private
     FNode: TChildNode;
     FConnect: TNodePin;
     FKind: TPinKind;
     FLocation: TPoint;
     procedure SetConnect(Value: TNodePin);
-	public
+  public
     constructor Create(Node: TChildNode; Kind: TPinKind);
     destructor Destroy; override;
     function CanConnect(Pin: TNodePin): Boolean;
@@ -117,7 +117,7 @@ type
 { TChildNode }
 
   TChildNode = class(TBaseNode)
-	private
+  private
     FOwner: TNodeList;
     FDragPin: TNodePin;
     FDragPoint: TPoint;
@@ -128,7 +128,7 @@ type
     FCloseDown: Boolean;
     function CloseRect: TRect;
     procedure SetTitle(const Value: string);
-	protected
+  protected
     procedure Changed; override;
     procedure Update; override;
     function GetConnected: Boolean; override;
@@ -144,10 +144,10 @@ type
     property InputCount: Integer read GetInputCount;
     property OutputPin[Index: Integer]: TNodePin read GetOutputPin;
     property OutputCount: Integer read GetOutputCount;
-	public
+  public
     constructor Create(Owner: TNodeList); virtual;
     destructor Destroy; override;
-		procedure Align; override;
+    procedure Align; override;
     procedure Draw(Canvas: TCanvas); override;
     function PinFromPoint(X, Y: Integer; Kind: TPinKind): TNodePin;
     function  MouseOver(X, Y: Integer): Boolean; override;
@@ -155,7 +155,7 @@ type
     procedure MouseDrag(X, Y: Integer); override;
     procedure MouseUp(X, Y: Integer); override;
     procedure MoveTo(X, Y: Integer);
-		function Regenerate: Boolean; override;
+    function Regenerate: Boolean; override;
     property Info: string read GetInfo;
     property Title: string read FTitle write SetTitle;
   end;
@@ -163,25 +163,25 @@ type
 { TDisplayNode }
 
   TDisplayNode = class(TChildNode)
-	private
+  private
     FInput: TNodePin;
-	protected
+  protected
     function GetInfo: string; override;
     function GetInputPin(Index: Integer): TNodePin; override;
-		function GetInputCount: Integer; override;
+    function GetInputCount: Integer; override;
   public
     constructor Create(Owner: TNodeList); override;
-		procedure Align; override;
+    procedure Align; override;
     property Input: TNodePin read FInput;
   end;
 
   { TControlNode }
 
   TControlNode = class(TChildNode)
-	private
-		FControl: TRect;
-		FPressed: Boolean;
-	public
+  private
+    FControl: TRect;
+    FPressed: Boolean;
+  public
     procedure Draw(Canvas: TCanvas); override;
     procedure MouseDown(X, Y: Integer); override;
     procedure MouseDrag(X, Y: Integer); override;
@@ -191,12 +191,12 @@ type
 { TImageNode }
 
   TImageNode = class(TControlNode)
-	private
+  private
     FOutput: TNodePin;
     FImage: TPortableNetworkGraphic;
     FSurface: TPortableNetworkGraphic;
     FFileName: string;
-	protected
+  protected
     function GetImage: TGraphic; override;
     function GetInfo: string; override;
     function GetOutputPin(Index: Integer): TNodePin; override;
@@ -206,15 +206,15 @@ type
     destructor Destroy; override;
     procedure Clear;
     procedure LoadImage(const FileName: string);
-		function Regenerate: Boolean; override;
+    function Regenerate: Boolean; override;
     procedure Draw(Canvas: TCanvas); override;
     procedure MouseUp(X, Y: Integer); override;
     property Output: TNodePin read FOutput;
-	end;
+  end;
 
 { TSliderNode }
 
-	TSliderNode = class(TControlNode)
+  TSliderNode = class(TControlNode)
   private
     FPosition: Single;
     procedure SetPosition(Value: Single);
@@ -228,20 +228,20 @@ type
 { TOperationNode }
 
   TOperationNode = class(TSliderNode)
-	private
+  private
     FOperation: TPixelOperationProc;
     FInput: TNodePin;
     FOutput: TNodePin;
-	protected
-		function GetImage: TGraphic; override;
+  protected
+    function GetImage: TGraphic; override;
     function GetInfo: string; override;
     function GetInputPin(Index: Integer): TNodePin; override;
-		function GetInputCount: Integer; override;
+    function GetInputCount: Integer; override;
     function GetOutputPin(Index: Integer): TNodePin; override;
     function GetOutputCount: Integer; override;
-	public
+  public
     constructor Create(Owner: TNodeList); override;
-		function Regenerate: Boolean; override;
+    function Regenerate: Boolean; override;
     property Operation: TPixelOperationProc read FOperation write FOperation;
     property Input: TNodePin read FInput;
     property Output: TNodePin read FOutput;
@@ -250,23 +250,23 @@ type
 { TBlendNode }
 
   TBlendNode = class(TSliderNode)
-	private
+  private
     FBlend: TPixelBlendProc;
     FImage: TPortableNetworkGraphic;
     FInputA: TNodePin;
     FInputB: TNodePin;
     FOutput: TNodePin;
-	protected
-		function GetImage: TGraphic; override;
+  protected
+    function GetImage: TGraphic; override;
     function GetInfo: string; override;
     function GetInputPin(Index: Integer): TNodePin; override;
-		function GetInputCount: Integer; override;
+    function GetInputCount: Integer; override;
     function GetOutputPin(Index: Integer): TNodePin; override;
     function GetOutputCount: Integer; override;
-	public
+  public
     constructor Create(Owner: TNodeList); override;
     destructor Destroy; override;
-		function Regenerate: Boolean; override;
+    function Regenerate: Boolean; override;
     property Blend: TPixelBlendProc read FBlend write FBlend;
     property InputA: TNodePin read FInputA;
     property InputB: TNodePin read FInputB;
@@ -292,10 +292,10 @@ var
   R: TRect;
 begin
   if S = '' then
-  	Exit;
+    Exit;
   F := DT_WORDBREAK;
   if Direction = dirWrap then
-	  DrawText(Canvas.Handle, PChar(S), -1, Rect, DT_LEFT or F);
+    DrawText(Canvas.Handle, PChar(S), -1, Rect, DT_LEFT or F);
   F := F or Ord(Direction);
   R := Rect;
   DrawText(Canvas.Handle, PChar(S), -1, R, F or DT_CALCRECT);
@@ -311,7 +311,7 @@ const
 function PointInRect(const Rect: TRect; X, Y: Integer): Boolean;
 begin
   Result := (X > Rect.Left) and (X < Rect.Right) and
-	  (Y > Rect.Top) and (Y < Rect.Bottom);
+    (Y > Rect.Top) and (Y < Rect.Bottom);
 end;
 
 function RectIsEmpty(const Rect: TRect): Boolean;
@@ -348,27 +348,27 @@ begin
   if Value = nil then
   begin
     if FConnect <> nil then
-    	FConnect.FConnect := nil;
+      FConnect.FConnect := nil;
     FConnect := nil;
-		FNode.Changed;
+    FNode.Changed;
   end
   else if CanConnect(Value) then
   begin
 
     if FConnect <> nil then
     begin
-    	if FConnect.FConnect <> nil then
-	      FConnect.FConnect.FConnect := nil;
-    	FConnect.FConnect := nil;
+      if FConnect.FConnect <> nil then
+        FConnect.FConnect.FConnect := nil;
+      FConnect.FConnect := nil;
     end;
-		if Value.FConnect <> nil then
-			Value.FConnect.FConnect := nil;
+    if Value.FConnect <> nil then
+      Value.FConnect.FConnect := nil;
     FConnect := Value;
     FConnect.FConnect := Self;
-		FNode.Changed;
+    FNode.Changed;
   end;
   if FNode.FOwner <> nil then
-		FNode.FOwner.Update;
+    FNode.FOwner.Update;
 end;
 
 function TNodePin.CanConnect(Pin: TNodePin): Boolean;
@@ -380,24 +380,24 @@ var
     P: TNodePin;
     I: Integer;
   begin
-		for I := 0 to Node.GetOutputCount - 1 do
-		begin
+    for I := 0 to Node.GetOutputCount - 1 do
+    begin
       P := Node.GetOutputPin(I);
       if P.Connect <> nil then
-      	if P.Connect.FNode = FNode then
+        if P.Connect.FNode = FNode then
         begin
           Linked := True;
           Exit;
         end
-      	else
-        	CheckLinks(P.Connect.FNode);
+        else
+          CheckLinks(P.Connect.FNode);
     end;
   end;
 
 begin
   if FKind = pkInput then
-  	Exit(False);
-	Result := (Pin.FNode <> FNode) and (Pin.FKind = pkInput);
+    Exit(False);
+  Result := (Pin.FNode <> FNode) and (Pin.FKind = pkInput);
   if Result then
   begin
     Linked := False;
@@ -435,7 +435,7 @@ end;
 
 constructor TNodeList.Create;
 begin
-	inherited Create;
+  inherited Create;
   FList := TList.Create;
   FDisplay := TDisplayNode.Create(Self);
 end;
@@ -444,31 +444,31 @@ destructor TNodeList.Destroy;
 begin
   FDisplay := nil;
   while Count > 1 do
-  	Remove(Node[0]);
+    Remove(Node[0]);
   FList.Free;
   inherited Destroy;
 end;
 
 function TNodeList.GetCount: Integer;
 begin
-	Result := FList.Count;
+  Result := FList.Count;
 end;
 
 function TNodeList.GetNode(Index: Integer): TChildNode;
 begin
-	Result := TChildNode(FList[Index]);
+  Result := TChildNode(FList[Index]);
 end;
 
 procedure TNodeList.Changed;
 begin
-	if Assigned(FOnChange) then
-  	FOnChange(Self);
+  if Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 procedure TNodeList.Update;
 begin
-	if Assigned(FOnUpdate) then
-  	FOnUpdate(Self);
+  if Assigned(FOnUpdate) then
+    FOnUpdate(Self);
 end;
 
 procedure TNodeList.Add(Node: TChildNode);
@@ -476,29 +476,29 @@ begin
   FList.Add(Node);
   Inc(FInsert.X, GridSize * 2);
   if FInsert.X > 500 then
-		FInsert.X := GridSize * 2;
+    FInsert.X := GridSize * 2;
   Inc(FInsert.Y, GridSize * 2);
   if FInsert.Y > 200 then
-	  FInsert.Y := GridSize * 2;
-	Node.FRect.TopLeft := FInsert;
+    FInsert.Y := GridSize * 2;
+  Node.FRect.TopLeft := FInsert;
   Node.FRect.Right := Node.FRect.Left + NodeWidth;
   Node.FRect.Bottom := Node.FRect.Top + NodeHeight;
   Node.Align;
-	Changed;
+  Changed;
 end;
 
 procedure TNodeList.Remove(Node: TChildNode);
 var
   WasConnected: Boolean;
 begin
-	if Node.Owner = Self then
-	begin
+  if Node.Owner = Self then
+  begin
     WasConnected := Contains(Node);
     FList.Remove(Node);
     Node.Release;
-  	Changed;
+    Changed;
     if WasConnected then
-	    Update;
+      Update;
   end;
 end;
 
@@ -507,7 +507,7 @@ begin
   FDisplay := nil;
   while Count > 0 do
     Remove(Node[0]);
-	FDisplay := TDisplayNode.Create(Self);
+  FDisplay := TDisplayNode.Create(Self);
   FInsert.X := GridSize;
   FInsert.Y := GridSize;
   Changed;
@@ -518,7 +518,7 @@ procedure TNodeList.Align;
 var
   N: TChildNode;
 begin
-	for N in Self do N.Align;
+  for N in Self do N.Align;
 end;
 
 procedure TNodeList.Draw(Canvas: TCanvas);
@@ -532,26 +532,26 @@ begin
   Canvas.FillRect(0, 0, FWidth, FHeight);
   Canvas.Pen.Color := clBlack;
   Canvas.Pen.Style := psDot;
-	for X := 0 to FWidth div GridSize div 2 + 1 do
-	begin
+  for X := 0 to FWidth div GridSize div 2 + 1 do
+  begin
     Y := X * GridSize * 2;
-		Canvas.MoveTo(Y, 0);
-		Canvas.LineTo(Y, FHeight + 1);
+    Canvas.MoveTo(Y, 0);
+    Canvas.LineTo(Y, FHeight + 1);
   end;
-	for Y := 0 to FHeight div GridSize div 2 + 1 do
-	begin
+  for Y := 0 to FHeight div GridSize div 2 + 1 do
+  begin
     X := Y * GridSize * 2;
-		Canvas.MoveTo(0, X);
-		Canvas.LineTo(FWidth + 1, X);
+    Canvas.MoveTo(0, X);
+    Canvas.LineTo(FWidth + 1, X);
   end;
   Canvas.Pen.Style := psSolid;
   for N in Self do
-  	N.Draw(Canvas);
+    N.Draw(Canvas);
   if FHotNode <> nil then
   begin
     S := FHotNode.Info;
     if S = '' then
-    	Exit;
+      Exit;
     R.Right := FWidth + 1;
     R.Bottom := FHeight + 1;
     R.Top := R.Bottom - Canvas.TextHeight('Wg') - 8;
@@ -582,21 +582,21 @@ begin
   if FCaptureNode <> nil then
   begin
     MouseDrag(X, Y);
-  	Exit;
+    Exit;
   end;
   for I := Count - 1 downto 0 do
   begin
-		N := Node[I];
-  	if N.MouseOver(X, Y) then
+    N := Node[I];
+    if N.MouseOver(X, Y) then
     begin
       if FHotNode <> N then
-      	Changed;
+        Changed;
       FHotNode := N;
-    	Exit;
+      Exit;
     end;
   end;
   if FHotNode <> nil then
-		Changed;
+    Changed;
   FHotNode := nil;
 end;
 
@@ -606,12 +606,12 @@ var
   I: Integer;
 begin
   if (FHotNode <> nil) or (FCaptureNode <> nil) then
-		Changed;
+    Changed;
   FCaptureNode := nil;
   for I := Count - 1 downto 0 do
   begin
-		N := Node[I];
-  	if N.MouseOver(X, Y) then
+    N := Node[I];
+    if N.MouseOver(X, Y) then
     begin
       FHotNode := N;
       FCaptureNode := N;
@@ -624,15 +624,15 @@ end;
 
 procedure TNodeList.MouseDrag(X, Y: Integer);
 begin
-	if FCaptureNode = nil then
-  	Exit;
+  if FCaptureNode = nil then
+    Exit;
   FCaptureNode.MouseDrag(X, Y);
 end;
 
 procedure TNodeList.MouseUp(X, Y: Integer);
 begin
-	if FCaptureNode = nil then
-  	Exit;
+  if FCaptureNode = nil then
+    Exit;
   FCaptureNode.MouseUp(X, Y);
   FCaptureNode := nil;
   Changed;
@@ -648,20 +648,20 @@ end;
 
 function TNodeList.Regenerate: Boolean;
 begin
-	Result := FDisplay.Regenerate;
+  Result := FDisplay.Regenerate;
 end;
 
 function TNodeList.GetConnected: Boolean;
 begin
-	Result := FDisplay.GetConnected;
+  Result := FDisplay.GetConnected;
 end;
 
 function TNodeList.GetImage;
 begin
   if FDisplay <> nil then
-		Result := FDisplay.GetImage
-	else
-  	Result := nil;
+    Result := FDisplay.GetImage
+  else
+    Result := nil;
 end;
 
 
@@ -669,7 +669,7 @@ end;
 
 constructor TChildNode.Create(Owner: TNodeList);
 begin
-	inherited Create;
+  inherited Create;
   FOwner := Owner;
   FOwner.Add(Self);
 end;
@@ -680,9 +680,9 @@ var
 begin
   FReleased := True;
   for I := 0 to OutputCount - 1 do
-  	OutputPin[I].Free;
+    OutputPin[I].Free;
   for I := 0 to InputCount - 1 do
-  	InputPin[I].Free;
+    InputPin[I].Free;
   inherited Destroy;
 end;
 
@@ -690,10 +690,10 @@ function TChildNode.CloseRect: TRect;
 begin
   if Self is TDisplayNode then
   begin
-		Result.Left := 0;
-		Result.Top := 0;
-		Result.Right := 0;
-		Result.Bottom := 0;
+    Result.Left := 0;
+    Result.Top := 0;
+    Result.Right := 0;
+    Result.Bottom := 0;
   end
   else
   begin
@@ -711,40 +711,40 @@ var
 begin
   PriorOwner := FOwner;
   if PriorOwner = nil then
-  	Exit;
+    Exit;
   FOwner := nil;
-	MustFree := not FReleased;
+  MustFree := not FReleased;
   FReleased := True;
-	PriorOwner.Remove(Self);
-	if MustFree then
-  	Free;
+  PriorOwner.Remove(Self);
+  if MustFree then
+    Free;
 end;
 
 function TChildNode.GetInputPin(Index: Integer): TNodePin;
 begin
-	Result := nil;
+  Result := nil;
 end;
 
 function TChildNode.GetInputCount: Integer;
 begin
-	Result := 0;
+  Result := 0;
 end;
 
 function TChildNode.GetOutputPin(Index: Integer): TNodePin;
 begin
-	Result := nil;
+  Result := nil;
 end;
 
 function TChildNode.GetOutputCount: Integer;
 begin
-	Result := 0;
+  Result := 0;
 end;
 
 procedure TChildNode.SetTitle(const Value: string);
 begin
   if Value <> FTitle then
   begin
-  	FTitle := Value;
+    FTitle := Value;
     Changed;
   end;
 end;
@@ -752,40 +752,40 @@ end;
 procedure TChildNode.Changed;
 begin
   if FOwner <> nil then
-	  FOwner.Changed;
+    FOwner.Changed;
 end;
 
 procedure TChildNode.Update;
 begin
   if FOwner <> nil then
-  	if FOwner.Contains(Self) then
-		  FOwner.Update;
+    if FOwner.Contains(Self) then
+      FOwner.Update;
 end;
 
 function TChildNode.GetConnected;
 begin
-	Result := GetImage <> nil;
+  Result := GetImage <> nil;
 end;
 
 function TChildNode.GetImage: TGraphic;
 begin
   if FOwner.FContainsNode = Self then
-  	FOwner.FContains := True;
-	Result := nil;
+    FOwner.FContains := True;
+  Result := nil;
   if (InputCount > 0) and (InputPin[0].Connect <> nil) then
-  	Result := InputPin[0].Connect.Node.GetImage;
+    Result := InputPin[0].Connect.Node.GetImage;
 end;
 
 function TChildNode.GetInfo: string;
 begin
-	Result := '';
+  Result := '';
 end;
 
 function TChildNode.Regenerate: Boolean;
 begin
-	Result := False;
+  Result := False;
   if (InputCount > 0) and (InputPin[0].Connect <> nil) then
-  	Result := InputPin[0].Connect.Node.Regenerate;
+    Result := InputPin[0].Connect.Node.Regenerate;
 end;
 
 procedure TChildNode.Align;
@@ -794,25 +794,25 @@ var
   P: TPoint;
   I: Integer;
 begin
-	R.Left := FRect.Left div GridSize * GridSize;
+  R.Left := FRect.Left div GridSize * GridSize;
   if R.Left < 0 then
-  	R.Left := 0;
-	R.Top := FRect.Top div GridSize * GridSize;
+    R.Left := 0;
+  R.Top := FRect.Top div GridSize * GridSize;
   if R.Top < 0 then
-	  R.Top := 0;
+    R.Top := 0;
   R.Right := R.Left + NodeWidth;
   R.Bottom := R.Top + NodeHeight;
-	for I := 0 to InputCount - 1 do
-	begin
-		P.X := R.Left - GridSize;
-	  P.Y := R.Top + NodeHeight div (InputCount + 1) * (I + 1);
-  	InputPin[I].FLocation := P;
-	end;
-	for I := 0 to OutputCount - 1 do
+  for I := 0 to InputCount - 1 do
   begin
-		P.X := R.Right + GridSize;
+    P.X := R.Left - GridSize;
+    P.Y := R.Top + NodeHeight div (InputCount + 1) * (I + 1);
+    InputPin[I].FLocation := P;
+  end;
+  for I := 0 to OutputCount - 1 do
+  begin
+    P.X := R.Right + GridSize;
     P.Y := R.Top + NodeHeight div (OutputCount + 1) * (I + 1);
-	  OutputPin[I].FLocation := P;
+    OutputPin[I].FLocation := P;
   end;
   if FRect <> R then
   begin
@@ -823,7 +823,7 @@ end;
 
 procedure TChildNode.Draw(Canvas: TCanvas);
 
-	procedure DrawClose;
+  procedure DrawClose;
   const
     Offset = 4;
   var
@@ -832,15 +832,15 @@ procedure TChildNode.Draw(Canvas: TCanvas);
   begin
     R := CloseRect;
     if RectIsEmpty(R) then
-    	Exit;
+      Exit;
     C := Canvas.Pen.Color;
     if FCloseDown then
-			Canvas.Pen.Color := clStyleHighlight;
+      Canvas.Pen.Color := clStyleHighlight;
     Canvas.Pen.Width := 3;
-		Canvas.MoveTo(R.Left + Offset, R.Top + Offset);
-		Canvas.LineTo(R.Right - Offset - 1, R.Bottom - Offset - 1);
-		Canvas.MoveTo(R.Left + Offset, R.Bottom - Offset - 1);
-		Canvas.LineTo(R.Right - Offset - 1, R.Top + Offset);
+    Canvas.MoveTo(R.Left + Offset, R.Top + Offset);
+    Canvas.LineTo(R.Right - Offset - 1, R.Bottom - Offset - 1);
+    Canvas.MoveTo(R.Left + Offset, R.Bottom - Offset - 1);
+    Canvas.LineTo(R.Right - Offset - 1, R.Top + Offset);
     Canvas.Pen.Width := 1;
     Canvas.Pen.Color := C;
   end;
@@ -853,13 +853,13 @@ begin
   R := FRect;
   if Self = FOwner.FHotNode then
   begin
-	  Canvas.Pen.Color := clStyleText;
-		Canvas.Font.Color := clStyleText;
+    Canvas.Pen.Color := clStyleText;
+    Canvas.Font.Color := clStyleText;
   end
   else
   begin
-	  Canvas.Pen.Color := clStyleDull;
-		Canvas.Font.Color := clStyleDull;
+    Canvas.Pen.Color := clStyleDull;
+    Canvas.Font.Color := clStyleDull;
   end;
   Canvas.Brush.Color := clStyleWindow;
   Canvas.Rectangle(R);
@@ -870,7 +870,7 @@ begin
   DrawClose;
   if InputCount > 0 then
   begin
-		for I := 0 to InputCount - 1 do
+    for I := 0 to InputCount - 1 do
     begin
       P := InputPin[I].FLocation;
       Canvas.MoveTo(FRect.Left, P.Y);
@@ -884,31 +884,31 @@ begin
   end;
   if OutputCount > 0 then
   begin
-		for I := 0 to OutputCount - 1 do
+    for I := 0 to OutputCount - 1 do
     begin
       if OutputPin[I] = FDragPin then
       begin
         P := OutputPin[I].FLocation;
         Canvas.MoveTo(FRect.Right, P.Y);
         Canvas.LineTo(P.X, P.Y);
-      	P := FDragPoint;
+        P := FDragPoint;
         Canvas.LineTo(P.X - GridSize, P.Y);
         P.X := P.X - GridSize;
         Canvas.Brush.Color := Canvas.Pen.Color;
         Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 2,
-        	P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
+          P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
       end
       else if OutputPin[I].Connect <> nil then
       begin
         P := OutputPin[I].FLocation;
         Canvas.MoveTo(FRect.Right, P.Y);
         Canvas.LineTo(P.X, P.Y);
-      	P := OutputPin[I].Connect.FLocation;
+        P := OutputPin[I].Connect.FLocation;
         P.X := P.X - GridSize;
         Canvas.LineTo(P);
         Canvas.Brush.Color := Canvas.Pen.Color;
         Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 2,
-        	P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
+          P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
       end
       else
       begin
@@ -917,7 +917,7 @@ begin
         Canvas.LineTo(P.X, P.Y);
         Canvas.Brush.Color := Canvas.Pen.Color;
         Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 1,
-        	P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
+          P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
       end;
     end;
   end;
@@ -936,34 +936,34 @@ var
 begin
   Result := nil;
   if Kind = pkInput then
-		for I := 0 to InputCount - 1 do
+    for I := 0 to InputCount - 1 do
     begin
-	      P := InputPin[I].FLocation;
-      	if Distance(X, Y, P.X, P.Y) < GridSize then
-        	Exit(InputPin[I])
-	  end
+        P := InputPin[I].FLocation;
+        if Distance(X, Y, P.X, P.Y) < GridSize then
+          Exit(InputPin[I])
+    end
   else
-		for I := 0 to OutputCount - 1 do
+    for I := 0 to OutputCount - 1 do
     begin
       C := OutputPin[I].Connect;
       if C = nil then
       begin
-  	    P := OutputPin[I].FLocation;
+        P := OutputPin[I].FLocation;
         if Distance(X, Y, P.X, P.Y) < GridSize then
           Exit(OutputPin[I]);
-			end
+      end
       else
       begin
-				P := C.FLocation;
+        P := C.FLocation;
         if Distance(X, Y, P.X, P.Y) < GridSize then
           Exit(OutputPin[I]);
-			end;
-	  end;
+      end;
+    end;
 end;
 
 function TChildNode.MouseOver(X, Y: Integer): Boolean;
 begin
-	Result := PointInRect(FRect, X, Y) or (PinFromPoint(X, Y, pkOutput) <> nil);
+  Result := PointInRect(FRect, X, Y) or (PinFromPoint(X, Y, pkOutput) <> nil);
 end;
 
 procedure TChildNode.MouseDown(X, Y: Integer);
@@ -974,7 +974,7 @@ begin
   if FCloseDown then
   begin
     Changed;
-  	Exit;
+    Exit;
   end;
   FDragPoint.X := X;
   FDragPoint.Y := Y;
@@ -984,15 +984,15 @@ end;
 procedure TChildNode.MouseDrag(X, Y: Integer);
 begin
   if FCloseDown then
-  	Exit;
+    Exit;
   if FDragPin <> nil then
   begin
     FDragPoint.X := X;
     FDragPoint.Y := Y;
-		Changed;
+    Changed;
   end
   else
-  	MoveTo(X, Y);
+    MoveTo(X, Y);
 end;
 
 procedure TChildNode.MouseUp(X, Y: Integer);
@@ -1005,25 +1005,25 @@ begin
   begin
     FCloseDown := False;
     Changed;
-  	if PointInRect(CloseRect, X, Y) then
-	    FOwner.Remove(Self);
+    if PointInRect(CloseRect, X, Y) then
+      FOwner.Remove(Self);
     Exit;
   end;
   if FDragPin <> nil then
   begin
     FDragPin.Connect := nil;
-  	for N in FOwner do
-	  begin
-    	if N = Self then
-      	Continue;
+    for N in FOwner do
+    begin
+      if N = Self then
+        Continue;
       for I := 0 to N.InputCount - 1 do
       begin
         P := N.PinFromPoint(X, Y, pkInput);
-      	if (P <> nil) and FDragPin.CanConnect(P) then
+        if (P <> nil) and FDragPin.CanConnect(P) then
         begin
           FDragPin.Connect := P;
           FDragPin := nil;
-					Exit;
+          Exit;
         end;
       end;
     end;
@@ -1036,12 +1036,12 @@ var
   X1, Y1: Integer;
 begin
   X1 := X - NodeWidth div 2;
-	Y1 := Y - NodeHeight div 2;
-	X1 := X1 div GridSize * GridSize;
-	Y1 := Y1 div GridSize * GridSize;
+  Y1 := Y - NodeHeight div 2;
+  X1 := X1 div GridSize * GridSize;
+  Y1 := Y1 div GridSize * GridSize;
   if (X1 <> FRect.Left) or (Y1 <> FRect.Top) then
   begin
-		FRect.Left := X1;
+    FRect.Left := X1;
     FRect.Top := Y - FCaptionHeight div 3;
     Align;
   end;
@@ -1062,28 +1062,28 @@ var
 begin
   G := GetImage;
   if G <> nil then
-  	Result := Format('Final output %d X %d', [G.Width, G.Height])
+    Result := Format('Final output %d X %d', [G.Width, G.Height])
   else
     Result := 'Final output no image';
 end;
 
 function TDisplayNode.GetInputPin(Index: Integer): TNodePin;
 begin
-	case Index of
-  	0: Result := FInput;
-	else
+  case Index of
+    0: Result := FInput;
+  else
     Result := nil;
   end;
 end;
 
 function TDisplayNode.GetInputCount: Integer;
 begin
-	Result := 1;
+  Result := 1;
 end;
 
 procedure TDisplayNode.Align;
 begin
-	FRect.Top := (Owner.Height - NodeHeight)  div 2;
+  FRect.Top := (Owner.Height - NodeHeight)  div 2;
   FRect.Left := Owner.Width - NodeWidth - GridSize * 2;
   FRect.Right := FRect.Left + NodeWidth;
   FRect.Bottom := FRect.Top + NodeHeight;
@@ -1107,20 +1107,20 @@ begin
   inherited MouseDown(X, Y);
   FPressed := PointInRect(FControl, X, Y);
   if FPressed then
-  	Changed;
+    Changed;
 end;
 
 procedure TControlNode.MouseDrag(X, Y: Integer);
 begin
   if not FPressed then
-  	inherited MouseDrag(X, Y);
+    inherited MouseDrag(X, Y);
 end;
 
 procedure TControlNode.MouseUp(X, Y: Integer);
 begin
   inherited MouseUp(X, Y);
   if FPressed then
-  	Changed;
+    Changed;
   FPressed := False;
 end;
 
@@ -1144,20 +1144,39 @@ end;
 
 procedure TImageNode.Clear;
 begin
-	FImage.Width := 0;
-	FImage.Height := 0;
-	FSurface.Width := 0;
-	FSurface.Height := 0;
+  FImage.Width := 0;
+  FImage.Height := 0;
+  FSurface.Width := 0;
+  FSurface.Height := 0;
 end;
 
 procedure TImageNode.LoadImage(const FileName: string);
 var
   P: TPicture;
+  Pixel: PPixel;
+  X, Y: Integer;
 begin
   P := TPicture.Create;
   try
     P.LoadFromFile(FileName);
-    FImage.Assign(P.Graphic);
+    if UpperCase(ExtractFileExt(FileName)) = '.PNG' then
+    begin
+      FImage.Assign(P.Graphic);
+    end
+    else
+    begin
+      FImage.Width := P.Width;
+      FImage.Height := P.Height;
+      FImage.PixelFormat := pf32bit;
+      FImage.Canvas.Draw(0, 0, P.Graphic);
+      Pixel := FImage.ScanLine[0];
+      for X := 1 to FImage.Width do
+        for Y := 1 to FImage.Height do
+        begin
+          Pixel.A := $FF;
+          Inc(Pixel);
+        end;
+    end;
     Regenerate;
     FFileName:= FileName;
   finally
@@ -1170,19 +1189,19 @@ end;
 function TImageNode.GetImage: TGraphic;
 begin
   if FOwner.FContainsNode = Self then
-  	FOwner.FContains := True;
+    FOwner.FContains := True;
   if FSurface.Empty then
-  	Result := nil
-	else
+    Result := nil
+  else
     Result := FSurface;
 end;
 
 function TImageNode.GetInfo: string;
 begin
   if FSurface.Empty then
-	  Result := 'No image has been loaded'
+    Result := 'No image has been loaded'
   else
-		Result := Format('Image %d X %d from %s', [FSurface.Width, FSurface.Height, FFileName]);
+    Result := Format('Image %d X %d from %s', [FSurface.Width, FSurface.Height, FFileName]);
 end;
 
 function TImageNode.Regenerate: Boolean;
@@ -1196,8 +1215,8 @@ begin
     FSurface.Height := 0;
     FSurface.Width := FImage.Width;
     FSurface.Height := FImage.Height;
-		FSurface.PixelFormat := FImage.PixelFormat;
-		A := FImage.ScanLine[0];
+    FSurface.PixelFormat := FImage.PixelFormat;
+    A := FImage.ScanLine[0];
     B := FSurface.ScanLine[0];
     Move(A^, B^, FImage.Width * FImage.Height * SizeOf(TPixel));
   end;
@@ -1209,9 +1228,9 @@ var
 begin
   inherited Draw(Canvas);
   if Self = FOwner.FHotNode then
-	  C := clStyleText
+    C := clStyleText
   else
-	  C := clStyleDull;
+    C := clStyleDull;
   if FPressed then
   begin
     Canvas.Pen.Color := clStyleHighlight;
@@ -1240,16 +1259,16 @@ begin
   WasPressed := FPressed;
   inherited MouseUp(X, Y);
   if WasPressed and PointInRect(FControl, X, Y) then
-	begin
-		D := TOpenPictureDialog.Create(nil);
+  begin
+    D := TOpenPictureDialog.Create(nil);
     try
-			if D.Execute then
+      if D.Execute then
       begin
         S := D.FileName;
         LoadImage(S);
         S := ExtractFileName(S);
         if Length(S) > Limit then
-        	SetLength(S, Limit);
+          SetLength(S, Limit);
         Title := S;
       end;
     finally
@@ -1260,16 +1279,16 @@ end;
 
 function TImageNode.GetOutputPin(Index: Integer): TNodePin;
 begin
-	case Index of
-  	0: Result := FOutput;
-	else
+  case Index of
+    0: Result := FOutput;
+  else
     Result := nil;
   end;
 end;
 
 function TImageNode.GetOutputCount: Integer;
 begin
-	Result := 1;
+  Result := 1;
 end;
 
 { TSliderNode }
@@ -1283,14 +1302,14 @@ end;
 procedure TSliderNode.SetPosition(Value: Single);
 begin
   if Value < 0 then
-  	Value := 0;
+    Value := 0;
   if Value > 1 then
-  	Value := 1;
+    Value := 1;
   if FPosition <> Value then
   begin
-  	FPosition := Value;
+    FPosition := Value;
     Changed;
-  	Update;
+    Update;
   end;
 end;
 
@@ -1304,9 +1323,9 @@ var
 begin
   inherited Draw(Canvas);
   if Self = FOwner.FHotNode then
-	  C := clStyleText
+    C := clStyleText
   else
-	  C := clStyleDull;
+    C := clStyleDull;
   if FPressed then
   begin
     Canvas.Pen.Color := clStyleHighlight;
@@ -1329,9 +1348,9 @@ end;
 
 procedure TSliderNode.MouseDrag(X, Y: Integer);
 begin
-	inherited MouseDrag(X, Y);
+  inherited MouseDrag(X, Y);
   if FPressed then
-		Position := (X - FControl.Left) / (FControl.Right - FControl.Left);
+    Position := (X - FControl.Left) / (FControl.Right - FControl.Left);
 end;
 
 { TOperationNode }
@@ -1346,10 +1365,10 @@ end;
 function TOperationNode.GetImage: TGraphic;
 begin
   if FOwner.FContainsNode = Self then
-  	FOwner.FContains := True;
-	if Assigned(FOperation) then
-  	Result := inherited GetImage
-	else
+    FOwner.FContains := True;
+  if Assigned(FOperation) then
+    Result := inherited GetImage
+  else
     Result := nil;
 end;
 
@@ -1358,15 +1377,15 @@ var
   G: TGraphic;
 begin
   if Input.Connect = nil then
-  	Result := Format(Title + ' operation no input at level %.3f', [Position])
-	else
-	begin
-  	G := GetImage;
-		if G = nil then
-	  	Result := Format(Title + ' operation connected no source image at level %.3f', [Position])
-		else
-	  	Result := Format(Title + ' operation connected %d X %d at level %.3f', [
-			G.Width, G.Height, Position]);
+    Result := Format(Title + ' operation no input at level %.3f', [Position])
+  else
+  begin
+    G := GetImage;
+    if G = nil then
+      Result := Format(Title + ' operation connected no source image at level %.3f', [Position])
+    else
+      Result := Format(Title + ' operation connected %d X %d at level %.3f', [
+      G.Width, G.Height, Position]);
   end;
 end;
 
@@ -1377,20 +1396,20 @@ var
   Pixel: PPixel;
   X, Y: Integer;
 begin
-	Result := inherited Regenerate;
-	if Result and Assigned(FOperation) then
+  Result := inherited Regenerate;
+  if Result and Assigned(FOperation) then
   begin
     Graphic := GetImage;
     if Graphic <> nil then
     begin
       Bitmap := Graphic as TPortableNetworkGraphic;
-			Pixel := PPixel(Bitmap.ScanLine[0]);
+      Pixel := PPixel(Bitmap.ScanLine[0]);
       ImageWidth := Bitmap.Width;
       ImageHeight := Bitmap.Height;
-    	for Y := 0 to ImageHeight - 1 do
-	      for X := 0 to ImageWidth - 1 do
+      for Y := 0 to ImageHeight - 1 do
+        for X := 0 to ImageWidth - 1 do
         begin
-					FOperation(Pixel^, X, Y, FPosition);
+          FOperation(Pixel^, X, Y, FPosition);
           Inc(Pixel);
         end;
       Result := True;
@@ -1400,9 +1419,9 @@ end;
 
 function TOperationNode.GetInputPin(Index: Integer): TNodePin;
 begin
-	case Index of
-  	0: Result := FInput;
-	else
+  case Index of
+    0: Result := FInput;
+  else
     Result := nil;
   end;
 end;
@@ -1414,9 +1433,9 @@ end;
 
 function TOperationNode.GetOutputPin(Index: Integer): TNodePin;
 begin
-	case Index of
-  	0: Result := FOutput;
-	else
+  case Index of
+    0: Result := FOutput;
+  else
     Result := nil;
   end;
 end;
@@ -1449,29 +1468,29 @@ var
   A, B: TGraphic;
   W, H: Integer;
 begin
-	Result := nil;
+  Result := nil;
   if FOwner.FContainsNode = Self then
-  	FOwner.FContains := True;
-	if Assigned(FBlend) and (FInputA.Connect <> nil) and
-  	(FInputB.Connect <> nil) then
+    FOwner.FContains := True;
+  if Assigned(FBlend) and (FInputA.Connect <> nil) and
+    (FInputB.Connect <> nil) then
   begin
     A := FInputA.Connect.Node.Image;
     B := FInputB.Connect.Node.Image;
     if (A = nil) or (B = nil) then
-    	Exit;
+      Exit;
     if A.Empty or B.Empty then
-    	Exit;
-		W := A.Width;
+      Exit;
+    W := A.Width;
     if B.Width < W then
-    	W := B.Width;
-		H := A.Height;
+      W := B.Width;
+    H := A.Height;
     if B.Height < H then
-    	H := B.Height;
+      H := B.Height;
     if (FImage.Width <> W) or (FImage.Height <> H) then
     begin
       FImage.Width := W;
       FImage.Height := H;
-		end;
+    end;
     Result := FImage;
   end
 end;
@@ -1481,17 +1500,17 @@ var
   G: TGraphic;
 begin
   if InputA.Connect = nil then
-		Result := Format(Title + ' blend no A input at level %.3f', [Position])
+    Result := Format(Title + ' blend no A input at level %.3f', [Position])
   else if InputB.Connect = nil then
-  	Result := Format(Title + ' blend no B input at level %.3f', [Position])
-	else
-	begin
-  	G := GetImage;
-		if G = nil then
-	  	Result := Format(Title + ' blend connected no source A or B image at level %.3f', [Position])
-		else
-	  	Result := Format(Title + ' blend connected %d X %d at level %.3f', [
-			G.Width, G.Height, Position]);
+    Result := Format(Title + ' blend no B input at level %.3f', [Position])
+  else
+  begin
+    G := GetImage;
+    if G = nil then
+      Result := Format(Title + ' blend connected no source A or B image at level %.3f', [Position])
+    else
+      Result := Format(Title + ' blend connected %d X %d at level %.3f', [
+      G.Width, G.Height, Position]);
   end;
 end;
 
@@ -1505,15 +1524,15 @@ begin
   Result := False;
   Graphic := GetImage;
   if Graphic = nil then
-  	Exit;
+    Exit;
   Result := InputA.Connect.Node.Regenerate and InputB.Connect.Node.Regenerate;
-	if Result then
+  if Result then
   begin
-		Graphic.Width := 0;
-		Graphic.Height := 0;
+    Graphic.Width := 0;
+    Graphic.Height := 0;
     Graphic := GetImage;
     if Graphic = nil then
-    	Exit;
+      Exit;
     ImageWidth := FImage.Width;
     ImageHeight := FImage.Height;
     BitmapA := InputA.Connect.Node.Image as TPortableNetworkGraphic;
@@ -1537,10 +1556,10 @@ end;
 
 function TBlendNode.GetInputPin(Index: Integer): TNodePin;
 begin
-	case Index of
-  	0: Result := FInputA;
-  	1: Result := FInputB;
-	else
+  case Index of
+    0: Result := FInputA;
+    1: Result := FInputB;
+  else
     Result := nil;
   end;
 end;
@@ -1552,9 +1571,9 @@ end;
 
 function TBlendNode.GetOutputPin(Index: Integer): TNodePin;
 begin
-	case Index of
-  	0: Result := FOutput;
-	else
+  case Index of
+    0: Result := FOutput;
+  else
     Result := nil;
   end;
 end;
