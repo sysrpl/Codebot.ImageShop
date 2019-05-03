@@ -93,7 +93,6 @@ end;
 
 procedure TImageForm.FormCreate(Sender: TObject);
 var
-  B: Byte;
   I: Integer;
 begin
   FNodes := TNodeList.Create;
