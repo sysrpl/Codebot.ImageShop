@@ -281,6 +281,9 @@ function PointInRect(const Rect: TRect; X, Y: Integer): Boolean;
 
 implementation
 
+var
+  SimpleWires: Boolean;
+
 function RectHeight(const Rect: TRect): Integer;
 begin
   Result := Rect.Bottom - Rect.Top;
@@ -664,7 +667,6 @@ begin
     Result := nil;
 end;
 
-
 { TChildNode }
 
 constructor TChildNode.Create(Owner: TNodeList);
@@ -845,6 +847,48 @@ procedure TChildNode.Draw(Canvas: TCanvas);
     Canvas.Pen.Color := C;
   end;
 
+  procedure DrawWire(A, B: TPoint);
+  var
+    X: Integer;
+  begin
+    Canvas.MoveTo(FRect.Right, A.Y);
+    Canvas.LineTo(A.X, A.Y);
+    if B.X < A.X + GridSize then
+    begin
+			if B.Y > A.Y then
+      begin
+				Canvas.LineTo(A.X, FRect.Bottom + GridSize * 2);
+				Canvas.LineTo(B.X - GridSize div 2, FRect.Bottom + GridSize * 2);
+				Canvas.LineTo(B.X - GridSize div 2, B.Y);
+      end
+      else
+      begin
+				Canvas.LineTo(A.X, FRect.Top - GridSize * 2);
+				Canvas.LineTo(B.X - GridSize div 2, FRect.Top - GridSize * 2);
+				Canvas.LineTo(B.X - GridSize div 2, B.Y);
+      end;
+    end
+    else if (B.X - A.X > Abs(B.Y - A.Y)) then
+    begin
+			X := ((B.X - A.X) - Abs(B.Y - A.Y)) div 2;
+      Canvas.LineTo(A.X + X, A.Y);
+      Canvas.LineTo(B.X - X, B.Y);
+      Canvas.LineTo(B.X, B.Y);
+    end
+    else
+    begin
+      X := (B.X - A.X - GridSize) div 2;
+      Canvas.LineTo(A.X + X, A.Y);
+      Canvas.LineTo(A.X + X, B.Y);
+      Canvas.LineTo(B.X - GridSize, B.Y);
+    end;
+    B.X := B.X - GridSize;
+    Canvas.Brush.Color := Canvas.Pen.Color;
+    Canvas.Brush.Color := Canvas.Pen.Color;
+    Canvas.Rectangle(B.X + 1, B.Y - GridSize div 2 + 1,
+      B.X + GridSize - 1, B.Y + GridSize div 2 - 1);
+  end;
+
 var
   R: TRect;
   P: TPoint;
@@ -888,27 +932,37 @@ begin
     begin
       if OutputPin[I] = FDragPin then
       begin
-        P := OutputPin[I].FLocation;
-        Canvas.MoveTo(FRect.Right, P.Y);
-        Canvas.LineTo(P.X, P.Y);
-        P := FDragPoint;
-        Canvas.LineTo(P.X - GridSize, P.Y);
-        P.X := P.X - GridSize;
-        Canvas.Brush.Color := Canvas.Pen.Color;
-        Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 2,
-          P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
+        if SimpleWires then
+        begin
+          P := OutputPin[I].FLocation;
+          Canvas.MoveTo(FRect.Right, P.Y);
+          Canvas.LineTo(P.X, P.Y);
+          P := FDragPoint;
+          Canvas.LineTo(P.X - GridSize, P.Y);
+          P.X := P.X - GridSize;
+          Canvas.Brush.Color := Canvas.Pen.Color;
+          Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 2,
+            P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
+        end
+        else
+	        DrawWire(OutputPin[I].FLocation, FDragPoint);
       end
       else if OutputPin[I].Connect <> nil then
       begin
-        P := OutputPin[I].FLocation;
-        Canvas.MoveTo(FRect.Right, P.Y);
-        Canvas.LineTo(P.X, P.Y);
-        P := OutputPin[I].Connect.FLocation;
-        P.X := P.X - GridSize;
-        Canvas.LineTo(P);
-        Canvas.Brush.Color := Canvas.Pen.Color;
-        Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 2,
-          P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
+        if SimpleWires then
+				begin
+          P := OutputPin[I].FLocation;
+          Canvas.MoveTo(FRect.Right, P.Y);
+          Canvas.LineTo(P.X, P.Y);
+          P := OutputPin[I].Connect.FLocation;
+          P.X := P.X - GridSize;
+          Canvas.LineTo(P);
+          Canvas.Brush.Color := Canvas.Pen.Color;
+          Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 2,
+            P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
+				end
+        else
+	        DrawWire(OutputPin[I].FLocation, OutputPin[I].Connect.FLocation);
       end
       else
       begin
@@ -1597,5 +1651,7 @@ begin
   Result := 1;
 end;
 
+initialization
+  SimpleWires := ParamStr(1) = '-simple';
 end.
 

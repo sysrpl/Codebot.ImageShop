@@ -223,6 +223,44 @@ begin
   Pixel := Mix(B, A, Level);
 end;
 
+var
+  FastR1: Integer = 13;
+  FastR2: Integer = 31;
+
+function FastRandom(Range: Integer): Integer;
+begin
+  FastR1 := 18030 * (FastR1 and $FFFF) + (FastR1 shr 16);
+  FastR2 := 30903 * (FastR2 and $FFFF) + (FastR2 shr 16);
+  if Range < 2 then
+  	Result := 0
+	else
+  	Result := (FastR1 shr 16 + (FastR2 and $FFFF)) mod Range;
+end;
+
+procedure FastRandomSeed(Seed: Integer);
+begin
+	FastR1 := Seed;
+  FastR2 := 31;
+  FastR2 := FastRandom(High(Word));
+end;
+
+procedure DisolveBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
+begin
+  if Level < 0.001 then
+  	Pixel := B
+	else if Level > 0.999 then
+  	Pixel := A
+	else
+  begin
+    if (X = 0) and (Y = 0) then
+    	FastRandomSeed(ImageWidth * ImageHeight);
+    if FastRandom(10000) < Level * 10000 then
+	    Pixel := A
+    else
+	    Pixel := B;
+  end;
+end;
+
 procedure MultiplyBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
 var
   P: TPixel;
@@ -300,6 +338,7 @@ end;
 procedure InitializeBlends(Add: TAddBlend);
 begin
   Add('Opacity', OpacityBlend);
+  Add('Disolve', DisolveBlend);
   Add('Multiply', MultiplyBlend);
   Add('Addition', AdditionBlend);
   Add('Subtraction', SubtractionBlend);
