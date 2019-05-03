@@ -20,7 +20,7 @@ type
   TPixelBlend = procedure(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
 
   TAddOperation = procedure(const Name: string; Proc: TPixelOperation);
-	TAddBlend = procedure(const Name: string; Proc: TPixelBlend);
+  TAddBlend = procedure(const Name: string; Proc: TPixelBlend);
 
 { Initialization callbacks }
 
