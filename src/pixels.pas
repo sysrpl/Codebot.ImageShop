@@ -75,12 +75,12 @@ end;
 
 procedure WhiteOperation(var Pixel: TPixel; X, Y: Integer; Level: Single);
 begin
-	Pixel := Mix(Pixel, White, Level);
+  Pixel := Mix(Pixel, White, Level);
 end;
 
 procedure OpacityBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
 begin
-	Pixel := Mix(B, A, Level);
+  Pixel := Mix(B, A, Level);
 end;
 
 { Initialization callbacks }
