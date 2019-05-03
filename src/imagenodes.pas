@@ -229,7 +229,7 @@ type
 
   TOperationNode = class(TSliderNode)
   private
-    FOperation: TPixelOperationProc;
+    FOperation: TPixelOperation;
     FInput: TNodePin;
     FOutput: TNodePin;
   protected
@@ -242,7 +242,7 @@ type
   public
     constructor Create(Owner: TNodeList); override;
     function Regenerate: Boolean; override;
-    property Operation: TPixelOperationProc read FOperation write FOperation;
+    property Operation: TPixelOperation read FOperation write FOperation;
     property Input: TNodePin read FInput;
     property Output: TNodePin read FOutput;
   end;
@@ -251,7 +251,7 @@ type
 
   TBlendNode = class(TSliderNode)
   private
-    FBlend: TPixelBlendProc;
+    FBlend: TPixelBlend;
     FImage: TPortableNetworkGraphic;
     FInputA: TNodePin;
     FInputB: TNodePin;
@@ -267,7 +267,7 @@ type
     constructor Create(Owner: TNodeList); override;
     destructor Destroy; override;
     function Regenerate: Boolean; override;
-    property Blend: TPixelBlendProc read FBlend write FBlend;
+    property Blend: TPixelBlend read FBlend write FBlend;
     property InputA: TNodePin read FInputA;
     property InputB: TNodePin read FInputB;
     property Output: TNodePin read FOutput;
@@ -1153,30 +1153,42 @@ end;
 procedure TImageNode.LoadImage(const FileName: string);
 var
   P: TPicture;
-  Pixel: PPixel;
-  X, Y: Integer;
+  A, B: PPixel;
+  C: Byte;
+  I: Integer;
 begin
   P := TPicture.Create;
   try
     P.LoadFromFile(FileName);
+    FImage.Width := P.Width;
+    FImage.Height := P.Height;
+    FImage.PixelFormat := pf32bit;
     if (P.Graphic is TPortableNetworkGraphic) and
-    	(TPortableNetworkGraphic(P.Graphic).PixelFormat = pf32bit) then
+      (TPortableNetworkGraphic(P.Graphic).PixelFormat = pf32bit) then
     begin
-      FImage.Assign(P.Graphic);
+      A := TPortableNetworkGraphic(P.Graphic).ScanLine[0];
+      B := FImage.ScanLine[0];
+      for I := 1 to FImage.Width * FImage.Height do
+      begin
+        B^ := A^;
+        {$ifdef linux}
+        C := B.R;
+        B.R := B.B;
+        B.B := C;
+        {$endif}
+        Inc(A);
+        Inc(B);
+      end;
     end
     else
     begin
-      FImage.Width := P.Width;
-      FImage.Height := P.Height;
-      FImage.PixelFormat := pf32bit;
       FImage.Canvas.Draw(0, 0, P.Graphic);
-      Pixel := FImage.ScanLine[0];
-      for X := 1 to FImage.Width do
-        for Y := 1 to FImage.Height do
-        begin
-          Pixel.A := $FF;
-          Inc(Pixel);
-        end;
+      A := FImage.ScanLine[0];
+      for I := 1 to FImage.Width * FImage.Height do
+      begin
+        A.A := $FF;
+        Inc(A);
+      end;
     end;
     Regenerate;
     FFileName:= FileName;
@@ -1216,7 +1228,7 @@ begin
     FSurface.Height := 0;
     FSurface.Width := FImage.Width;
     FSurface.Height := FImage.Height;
-    FSurface.PixelFormat := FImage.PixelFormat;
+    FSurface.PixelFormat := pf32bit;
     A := FImage.ScanLine[0];
     B := FSurface.ScanLine[0];
     Move(A^, B^, FImage.Width * FImage.Height * SizeOf(TPixel));
@@ -1491,6 +1503,7 @@ begin
     begin
       FImage.Width := W;
       FImage.Height := H;
+      FImage.PixelFormat := pf32bit;
     end;
     Result := FImage;
   end

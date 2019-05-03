@@ -7,27 +7,25 @@ interface
 { The TPixel type }
 
 type
+  {$ifdef linux}
+  TPixel = record R, G, B, A: Byte; end;
+  {$else}
   TPixel = record B, G, R, A: Byte; end;
+  {$endif}
   PPixel = ^TPixel;
 
 { Operation and blend registration functions }
 
-  TPixelOperationProc = procedure(var Pixel: TPixel; X, Y: Integer; Level: Single);
-  TPixelOperation = record
-    Name: string;
-    Proc: TPixelOperationProc;
-  end;
-  TPixelOperations = array of TPixelOperation;
+  TPixelOperation = procedure(var Pixel: TPixel; X, Y: Integer; Level: Single);
+  TPixelBlend = procedure(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
 
-  TPixelBlendProc = procedure(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
-  TPixelBlend = record
-    Name: string;
-    Proc: TPixelBlendProc;
-  end;
-  TPixelBlends = array of TPixelBlend;
+  TAddOperation = procedure(const Name: string; Proc: TPixelOperation);
+	TAddBlend = procedure(const Name: string; Proc: TPixelBlend);
 
-function PixelOperations(Index: Integer; out Operation: TPixelOperation): Boolean;
-function PixelBlends(Index: Integer; out Blend: TPixelBlend): Boolean;
+{ Initialization callbacks }
+
+procedure InitializeOperations(Add: TAddOperation);
+procedure InitializeBlends(Add: TAddBlend);
 
 { Globally set width and height of the image being processed by operations or blends }
 
@@ -39,8 +37,13 @@ implementation
 { Helper functions }
 
 const
+  {$ifdef linux}
+  White: TPixel = (R: $FF; G: $FF; B: $FF; A: $FF);
+  Black: TPixel = (R: 0; G: 0; B: 0; A: $FF);
+  {$else}
   White: TPixel = (B: $FF; G: $FF; R: $FF; A: $FF);
   Black: TPixel = (B: 0; G: 0; R: 0; A: $FF);
+  {$endif}
 
 function RoundByte(Value: Single): Byte; inline;
 begin
@@ -141,7 +144,6 @@ begin
   P.B := D;
   P.G := D;
   P.R := D;
-  P.A := $FF;
   Pixel := Mix(P, Pixel, Level);
 end;
 
@@ -187,7 +189,6 @@ begin
   Pixel.R := RoundByte(Pixel.R + R * $FF);
 end;
 
-
 procedure DarkenOperation(var Pixel: TPixel; X, Y: Integer; Level: Single);
 begin
   Pixel.B := RoundByte(Pixel.B - Level * $FF);
@@ -210,10 +211,10 @@ begin
   Pixel.B := RoundByte(Pixel.B + (Level - 0.5) * $FF * 2);
 end;
 
-{procedure AlphaOperation(var Pixel: TPixel; X, Y: Integer; Level: Single);
+procedure AlphaOperation(var Pixel: TPixel; X, Y: Integer; Level: Single);
 begin
   Pixel.A := RoundByte(Pixel.A * Level);
-end;}
+end;
 
 { Blend procedures }
 
@@ -279,108 +280,31 @@ begin
     Pixel := B;
 end;
 
-{ Operation and blend registration functions }
+{ Initialization callbacks }
 
-function PixelOperations(Index: Integer; out Operation: TPixelOperation): Boolean;
+procedure InitializeOperations(Add: TAddOperation);
 begin
-  Operation.Name := '';
-  Operation.Proc := nil;
-  Result := True;
-  case Index of
-    0:
-      begin
-        Operation.Name := 'Red Channel';
-        Operation.Proc := RedOperation;
-      end;
-    1:
-      begin
-        Operation.Name := 'Green Channel';
-        Operation.Proc := GreenOperation;
-      end;
-    2:
-      begin
-        Operation.Name := 'Blue Channel';
-        Operation.Proc := BlueOperation;
-      end;
-    3:
-      begin
-        Operation.Name := 'Saturation';
-        Operation.Proc := SaturationOperation;
-      end;
-    4:
-      begin
-        Operation.Name := 'Black or White';
-        Operation.Proc := BlackOrWhiteOperation;
-      end;
-    5:
-      begin
-        Operation.Name := 'Brighten';
-        Operation.Proc := BrightenOperation;
-      end;
-    6:
-      begin
-        Operation.Name := 'Contrast';
-        Operation.Proc := ContrastOperation;
-      end;
-    7:
-      begin
-        Operation.Name := 'Darken';
-        Operation.Proc := DarkenOperation;
-      end;
-    8:
-      begin
-        Operation.Name := 'Invert';
-        Operation.Proc := InvertOperation;
-      end;
-    9:
-      begin
-        Operation.Name := 'Hue';
-        Operation.Proc := HueOperation;
-      end
-  else
-    Result := False;
-  end;
+  Add('Red Channel', RedOperation);
+  Add('Green Channel', GreenOperation);
+  Add('Blue Channel', BlueOperation);
+  Add('Saturation', SaturationOperation);
+  Add('Alpha Channel', AlphaOperation);
+  Add('Black or White', BlackOrWhiteOperation);
+  Add('Brighten', BrightenOperation);
+  Add('Contrast', ContrastOperation);
+  Add('Darken', DarkenOperation);
+  Add('Invert', InvertOperation);
+  Add('Hue', HueOperation);
 end;
 
-function PixelBlends(Index: Integer; out Blend: TPixelBlend): Boolean;
+procedure InitializeBlends(Add: TAddBlend);
 begin
-  Blend.Name := '';
-  Blend.Proc := nil;
-  Result := True;
-  case Index of
-    0:
-      begin
-        Blend.Name := 'Opacity';
-        Blend.Proc := OpacityBlend;
-      end;
-    1:
-      begin
-        Blend.Name := 'Multiply';
-        Blend.Proc := MultiplyBlend;
-      end;
-    2:
-      begin
-        Blend.Name := 'Addition';
-        Blend.Proc := AdditionBlend;
-      end;
-    3:
-      begin
-        Blend.Name := 'Subtraction';
-        Blend.Proc := SubtractionBlend;
-      end;
-    4:
-      begin
-        Blend.Name := 'Wipe';
-        Blend.Proc := WipeBlend;
-      end;
-    5:
-      begin
-        Blend.Name := 'Circle';
-        Blend.Proc := CircleBlend;
-      end;
-  else
-    Result := False;
-  end;
+  Add('Opacity', OpacityBlend);
+  Add('Multiply', MultiplyBlend);
+  Add('Addition', AdditionBlend);
+  Add('Subtraction', SubtractionBlend);
+  Add('Wipe', WipeBlend);
+  Add('Circle', CircleBlend);
 end;
 
 end.

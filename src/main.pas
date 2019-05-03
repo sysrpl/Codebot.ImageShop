@@ -40,8 +40,6 @@ type
     procedure UpdateTimerTimer(Sender: TObject);
   private
     FNodes: TNodeList;
-    FOperations: TPixelOperations;
-    FBlends: TPixelBlends;
     FNodeBoxDown: Boolean;
     procedure NodesChange(Sender: TObject);
     procedure NodesUpdate(Sender: TObject);
@@ -54,12 +52,48 @@ implementation
 
 {$R *.lfm}
 
+type
+  TPixelOperationItem = record
+    Name: string;
+    Proc: TPixelOperation;
+  end;
+  TPixelOperations = array of TPixelOperationItem;
+
+  TPixelBlendItem = record
+    Name: string;
+    Proc: TPixelBlend;
+  end;
+  TPixelBlends = array of TPixelBlendItem;
+
+var
+	Operations: TPixelOperations;
+	Blends: TPixelBlends;
+
+procedure AddOperation(const Name: string; Proc: TPixelOperation);
+var
+  I: Integer;
+begin
+	I := Length(Operations);
+  SetLength(Operations, I + 1);
+  Operations[I].Name := Name;
+  Operations[I].Proc := Proc;
+end;
+
+procedure AddBlends(const Name: string; Proc: TPixelBlend);
+var
+  I: Integer;
+begin
+	I := Length(Blends);
+  SetLength(Blends, I + 1);
+  Blends[I].Name := Name;
+  Blends[I].Proc := Proc;
+end;
+
 { TImageForm }
 
 procedure TImageForm.FormCreate(Sender: TObject);
 var
-  O: TPixelOperation;
-  B: TPixelBlend;
+  B: Byte;
   I: Integer;
 begin
   FNodes := TNodeList.Create;
@@ -69,31 +103,13 @@ begin
   NodeBox.Items.AddObject('Image', TObject(1));
   NodeBox.Items.AddObject('Reset', TObject(1));
   NodeBox.Items.AddObject('Operator Nodes', nil);
-  SetLength(FOperations, 100);
-  for I := Low(FOperations) to High(FOperations) do
-    if PixelOperations(I, O) then
-    begin
-      FOperations[I] := O;
-      NodeBox.Items.AddObject(O.Name, TObject(2));
-    end
-    else
-    begin
-      SetLength(FOperations, I + 1);
-      Break;
-    end;
+  InitializeOperations(AddOperation);
+  for I := Low(Operations) to High(Operations) do
+    NodeBox.Items.AddObject(Operations[I].Name, TObject(2));
   NodeBox.Items.AddObject('Blend Nodes', nil);
-  SetLength(FBlends, 100);
-  for I := Low(FBlends) to High(FBlends) do
-    if PixelBlends(I, B) then
-    begin
-      FBlends[I] := B;
-      NodeBox.Items.AddObject(B.Name, TObject(3));
-    end
-    else
-    begin
-      SetLength(FBlends, I + 1);
-      Break;
-    end;
+  InitializeBlends(AddBlends);
+  for I := Low(Blends) to High(Blends) do
+	  NodeBox.Items.AddObject(Blends[I].Name, TObject(3));
   NodeBox.ItemIndex := -1;
 end;
 
@@ -131,11 +147,7 @@ begin
     B.Free;
   end;
   G := FNodes.Display.Image;
-  if G = nil then
-  begin
-
-  end
-  else
+  if G <> nil then
   begin
     X := (ImagePanel.Width - G.Width) div 2;
     Y := (ImagePanel.Height - G.Height) div 2;
@@ -259,21 +271,21 @@ begin
       else if S = 'Reset' then
         FNodes.Clear;
     2:
-      for I := Low(FOperations) to High(FOperations) do
-        if S = FOperations[I].Name then
+      for I := Low(Operations) to High(Operations) do
+        if S = Operations[I].Name then
         begin
           O := TOperationNode.Create(FNodes);
-          O.Title := FOperations[I].Name;
-          O.Operation := FOperations[I].Proc;
+          O.Title := Operations[I].Name;
+          O.Operation := Operations[I].Proc;
           O.MoveTo(X, Y);
         end;
     3:
-      for I := Low(FBlends) to High(FBlends) do
-        if S = FBlends[I].Name then
+      for I := Low(Blends) to High(Blends) do
+        if S = Blends[I].Name then
         begin
           B := TBlendNode.Create(FNodes);
-          B.Title := FBlends[I].Name;
-          B.Blend := FBlends[I].Proc;
+          B.Title := Blends[I].Name;
+          B.Blend := Blends[I].Proc;
           B.MoveTo(X, Y);
         end;
   end;
