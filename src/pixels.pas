@@ -144,6 +144,7 @@ begin
   P.B := D;
   P.G := D;
   P.R := D;
+  P.A := Pixel.A;
   Pixel := Mix(P, Pixel, Level);
 end;
 
