@@ -66,14 +66,14 @@ type
   TPixelBlends = array of TPixelBlendItem;
 
 var
-	Operations: TPixelOperations;
-	Blends: TPixelBlends;
+  Operations: TPixelOperations;
+  Blends: TPixelBlends;
 
 procedure AddOperation(const Name: string; Proc: TPixelOperation);
 var
   I: Integer;
 begin
-	I := Length(Operations);
+  I := Length(Operations);
   SetLength(Operations, I + 1);
   Operations[I].Name := Name;
   Operations[I].Proc := Proc;
@@ -83,7 +83,7 @@ procedure AddBlends(const Name: string; Proc: TPixelBlend);
 var
   I: Integer;
 begin
-	I := Length(Blends);
+  I := Length(Blends);
   SetLength(Blends, I + 1);
   Blends[I].Name := Name;
   Blends[I].Proc := Proc;
@@ -108,7 +108,7 @@ begin
   NodeBox.Items.AddObject('Blend Nodes', nil);
   InitializeBlends(AddBlends);
   for I := Low(Blends) to High(Blends) do
-	  NodeBox.Items.AddObject(Blends[I].Name, TObject(3));
+    NodeBox.Items.AddObject(Blends[I].Name, TObject(3));
   NodeBox.ItemIndex := -1;
 end;
 
@@ -195,12 +195,11 @@ procedure TImageForm.NodeBoxMouseUp(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
   S: string;
-  I, J: Integer;
+  I: Integer;
 begin
   if Button <> mbLeft then
     Exit;
   I := NodeBox.ItemIndex;
-  J := NodeBox.TopIndex;
   if I < 0 then
     Exit;
   S := NodeBox.Items[I];
@@ -210,9 +209,10 @@ begin
     if NodeBox.GetIndexAtXY(X, Y) = NodeBox.ItemIndex then
       FNodes.Clear;
     NodeBox.ItemIndex := -1;
+    NodeBox.Visible := False;
+    NodeBox.Visible := True;
   end;
   FNodeBoxDown := False;
-  NodeBox.TopIndex := J;
   NodeBox.Invalidate;
 end;
 
@@ -249,7 +249,7 @@ var
   O: TOperationNode;
   B: TBlendNode;
   S: string;
-  I, J: Integer;
+  I: Integer;
 begin
   if Button <> mbLeft then
     Exit;
@@ -260,7 +260,6 @@ begin
     FNodes.MouseOver(X, Y);
     Exit;
   end;
-  J := NodeBox.TopIndex;
   S := NodeBox.Items[I];
   I := IntPtr(NodeBox.Items.Objects[I]);
   case I of
@@ -288,8 +287,12 @@ begin
           B.MoveTo(X, Y);
         end;
   end;
+  I := NodeBox.TopIndex;
   NodeBox.ItemIndex := -1;
-  NodeBox.TopIndex := J;
+  NodeBox.Visible := False;
+  NodeBox.Visible := True;
+  NodeBox.Invalidate;
+  NodeBox.TopIndex := I;
 end;
 
 procedure TImageForm.NodePanelPaint(Sender: TObject);
