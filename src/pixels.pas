@@ -20,7 +20,7 @@ type
   TPixelBlend = procedure(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
 
   TAddOperation = procedure(const Name: string; Proc: TPixelOperation);
-	TAddBlend = procedure(const Name: string; Proc: TPixelBlend);
+  TAddBlend = procedure(const Name: string; Proc: TPixelBlend);
 
 { Initialization callbacks }
 
@@ -232,14 +232,14 @@ begin
   FastR1 := 18030 * (FastR1 and $FFFF) + (FastR1 shr 16);
   FastR2 := 30903 * (FastR2 and $FFFF) + (FastR2 shr 16);
   if Range < 2 then
-  	Result := 0
-	else
-  	Result := (FastR1 shr 16 + (FastR2 and $FFFF)) mod Range;
+    Result := 0
+  else
+    Result := (FastR1 shr 16 + (FastR2 and $FFFF)) mod Range;
 end;
 
 procedure FastRandomSeed(Seed: Integer);
 begin
-	FastR1 := Seed;
+  FastR1 := Seed;
   FastR2 := 31;
   FastR2 := FastRandom(High(Word));
 end;
@@ -247,17 +247,45 @@ end;
 procedure DisolveBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
 begin
   if Level < 0.001 then
-  	Pixel := B
-	else if Level > 0.999 then
-  	Pixel := A
-	else
+    Pixel := B
+  else if Level > 0.999 then
+    Pixel := A
+  else
   begin
     if (X = 0) and (Y = 0) then
-    	FastRandomSeed(ImageWidth * ImageHeight);
+      FastRandomSeed(ImageWidth * ImageHeight);
     if FastRandom(10000) < Level * 10000 then
-	    Pixel := A
+      Pixel := A
     else
-	    Pixel := B;
+      Pixel := B;
+  end;
+end;
+
+procedure BlockBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
+const
+  BlockSize = 50;
+var
+  Fade: Single;
+begin
+  if Level < 0.001 then
+    Pixel := B
+  else if Level > 0.999 then
+    Pixel := A
+  else
+  begin
+    Inc(X, BlockSize);
+    Inc(Y, BlockSize);
+    FastRandomSeed((X div BlockSize) + (Y div BlockSize) * (X div BlockSize) * 73 +
+      ImageWidth * 31 + ImageHeight * 57 * ImageWidth * 31);
+    Fade := Level + 0.2 - FastRandom(10000) / 10000;
+    if Level < 0.5 then
+      Fade := Fade * (Level / 0.5);
+    if Fade < 0.001 then
+      Pixel := B
+    else if Fade < 0.2 then
+      Pixel := Mix(B, A, Fade / 0.2)
+    else
+      Pixel := A;
   end;
 end;
 
@@ -344,6 +372,7 @@ begin
   Add('Subtraction', SubtractionBlend);
   Add('Wipe', WipeBlend);
   Add('Circle', CircleBlend);
+  Add('Blocks', BlockBlend);
 end;
 
 end.
