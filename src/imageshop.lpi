@@ -47,6 +47,7 @@
       <Unit2>
         <Filename Value="styles.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Styles"/>
       </Unit2>
       <Unit3>
         <Filename Value="imagenodes.pas"/>

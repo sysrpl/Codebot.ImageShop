@@ -347,6 +347,50 @@ begin
     Pixel := B;
 end;
 
+procedure ScreenBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
+var
+  P: TPixel;
+begin
+  P.R := RoundByte($FF - ($FF - A.R) * ($FF - B.R) / $FF);
+  P.G := RoundByte($FF - ($FF - A.G) * ($FF - B.G) / $FF);
+  P.B := RoundByte($FF - ($FF - A.B) * ($FF - B.B) / $FF);
+  P.A := RoundByte(A.A * B.A / $FF);
+  Pixel := Mix(B, P, Level);
+end;
+
+procedure OverlayBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
+var
+  P: TPixel;
+begin
+  P.R := RoundByte(B.R / $FF * (B.R + (2 * A.R) / $FF * ($FF - B.R)));
+  P.G := RoundByte(B.G / $FF * (B.G + (2 * A.G) / $FF * ($FF - B.G)));
+  P.B := RoundByte(B.B / $FF * (B.B + (2 * A.B) / $FF * ($FF - B.B)));
+  P.A := RoundByte(A.A * B.A / $FF);
+  Pixel := Mix(B, P, Level);
+end;
+
+procedure BurnBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
+var
+  P: TPixel;
+begin
+  P.R := RoundByte($FF - $100 * ($FF - B.R) / (A.R + 1));
+  P.G := RoundByte($FF - $100 * ($FF - B.G) / (A.G + 1));
+  P.B := RoundByte($FF - $100 * ($FF - B.B) / (A.B + 1));
+  P.A := RoundByte(A.A * B.A / $FF);
+  Pixel := Mix(B, P, Level);
+end;
+
+procedure DodgeBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
+var
+  P: TPixel;
+begin
+  P.R := RoundByte($100 * B.R / ($FF - A.R + 1));
+  P.G := RoundByte($100 * B.G / ($FF - A.G + 1));
+  P.B := RoundByte($100 * B.B / ($FF - A.B + 1));
+  P.A := RoundByte(A.A * B.A / $FF);
+  Pixel := Mix(B, P, Level);
+end;
+
 { Initialization callbacks }
 
 procedure InitializeOperations(Add: TAddOperation);
@@ -374,6 +418,10 @@ begin
   Add('Wipe', WipeBlend);
   Add('Circle', CircleBlend);
   Add('Blocks', BlockBlend);
+  Add('Screen', ScreenBlend);
+  Add('Overlay', OverlayBlend);
+  Add('Burn', BurnBlend);
+  Add('Dodge', DodgeBlend);
 end;
 
 end.

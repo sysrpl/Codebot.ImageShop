@@ -123,6 +123,7 @@ procedure TImageForm.FormShow(Sender: TObject);
 begin
   NodeBox.ItemIndex := 3;
   NodeBox.Invalidate;
+  NodeBox.ItemIndex := -1;
 end;
 
 procedure TImageForm.ImagePanelPaint(Sender: TObject);
