@@ -10,7 +10,7 @@
         <UnitName Value="ImageShop"/>
         <EditorIndex Value="1"/>
         <CursorPos X="12" Y="8"/>
-        <UsageCount Value="85"/>
+        <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -20,39 +20,42 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Main"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="77"/>
-        <CursorPos Y="96"/>
-        <UsageCount Value="85"/>
+        <TopLine Value="183"/>
+        <CursorPos Y="183"/>
+        <UsageCount Value="207"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="styles.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="Styles"/>
         <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="85"/>
+        <CursorPos X="14" Y="10"/>
+        <UsageCount Value="207"/>
       </Unit2>
       <Unit3>
         <Filename Value="imagenodes.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ImageNodes"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="216"/>
-        <CursorPos X="26" Y="222"/>
-        <UsageCount Value="85"/>
+        <TopLine Value="1160"/>
+        <CursorPos X="32" Y="1193"/>
+        <UsageCount Value="207"/>
+        <Bookmarks Count="1">
+          <Item0 Y="526" ID="1"/>
+        </Bookmarks>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="pixels.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="Pixels"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="19"/>
-        <UsageCount Value="85"/>
+        <TopLine Value="333"/>
+        <CursorPos X="33" Y="44"/>
+        <UsageCount Value="207"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
@@ -61,7 +64,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="3"/>
       </Unit5>
       <Unit6>
         <Filename Value="../../Development/Pascal/lazarus/lcl/graphics.pp"/>
@@ -69,126 +72,126 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1456"/>
         <CursorPos X="3" Y="1474"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="77"/>
       </Unit6>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="imagenodes.pas"/>
+        <Filename Value="pixels.pas"/>
+        <Caret Line="370" Column="5" TopLine="345"/>
       </Position1>
       <Position2>
-        <Filename Value="main.pas"/>
+        <Filename Value="pixels.pas"/>
+        <Caret Line="405" TopLine="372"/>
       </Position2>
       <Position3>
-        <Filename Value="main.pas"/>
-        <Caret Line="22" Column="9"/>
+        <Filename Value="pixels.pas"/>
+        <Caret Line="395" Column="6" TopLine="377"/>
       </Position3>
       <Position4>
-        <Filename Value="main.pas"/>
-        <Caret Line="23" Column="9"/>
+        <Filename Value="pixels.pas"/>
+        <Caret Line="301" TopLine="275"/>
       </Position4>
       <Position5>
         <Filename Value="main.pas"/>
-        <Caret Line="58" Column="9" TopLine="29"/>
+        <Caret Line="119" Column="24" TopLine="95"/>
       </Position5>
       <Position6>
-        <Filename Value="main.pas"/>
-        <Caret Line="64" Column="9" TopLine="35"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="208" Column="15" TopLine="190"/>
       </Position6>
       <Position7>
-        <Filename Value="main.pas"/>
-        <Caret Line="72" Column="48" TopLine="43"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="1223" TopLine="1204"/>
       </Position7>
       <Position8>
-        <Filename Value="main.pas"/>
-        <Caret Line="79" Column="29" TopLine="50"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="1236" TopLine="1207"/>
       </Position8>
       <Position9>
-        <Filename Value="main.pas"/>
-        <Caret Line="89" Column="29" TopLine="60"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="1247" Column="11" TopLine="1230"/>
       </Position9>
       <Position10>
-        <Filename Value="main.pas"/>
-        <Caret Line="92" Column="45" TopLine="63"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="1245" Column="21" TopLine="1220"/>
       </Position10>
       <Position11>
-        <Filename Value="main.pas"/>
-        <Caret Line="99" Column="25" TopLine="70"/>
+        <Filename Value="imagenodes.pas"/>
       </Position11>
       <Position12>
-        <Filename Value="main.pas"/>
-        <Caret Line="109" Column="25" TopLine="80"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="23" Column="24"/>
       </Position12>
       <Position13>
-        <Filename Value="main.pas"/>
-        <Caret Line="310" Column="22" TopLine="275"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="81" Column="24" TopLine="52"/>
       </Position13>
       <Position14>
-        <Filename Value="pixels.pas"/>
-        <Caret Line="285" TopLine="269"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="104" Column="17" TopLine="95"/>
       </Position14>
       <Position15>
         <Filename Value="main.pas"/>
-        <Caret Line="99" Column="21" TopLine="81"/>
+        <Caret Line="43" Column="17" TopLine="25"/>
       </Position15>
       <Position16>
         <Filename Value="main.pas"/>
-        <Caret Line="93" Column="31" TopLine="67"/>
       </Position16>
       <Position17>
         <Filename Value="main.pas"/>
-        <Caret Line="92" Column="41" TopLine="67"/>
+        <Caret Line="43" Column="17" TopLine="14"/>
       </Position17>
       <Position18>
         <Filename Value="main.pas"/>
-        <Caret Line="58" Column="5" TopLine="49"/>
+        <Caret Line="199" Column="15" TopLine="170"/>
       </Position18>
       <Position19>
         <Filename Value="main.pas"/>
-        <Caret Line="333" TopLine="298"/>
+        <Caret Line="224" Column="15" TopLine="195"/>
       </Position19>
       <Position20>
         <Filename Value="main.pas"/>
-        <Caret Line="99" Column="21" TopLine="81"/>
       </Position20>
       <Position21>
-        <Filename Value="pixels.pas"/>
-        <Caret Line="285" TopLine="251"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="43" Column="17" TopLine="14"/>
       </Position21>
       <Position22>
-        <Filename Value="pixels.pas"/>
-        <Caret Line="26" Column="50" TopLine="4"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="199" Column="15" TopLine="170"/>
       </Position22>
       <Position23>
         <Filename Value="main.pas"/>
-        <Caret Line="88" Column="32" TopLine="71"/>
+        <Caret Line="225" Column="25" TopLine="165"/>
       </Position23>
       <Position24>
         <Filename Value="main.pas"/>
-        <Caret Line="70" Column="22" TopLine="52"/>
+        <Caret Line="32" Column="26" TopLine="13"/>
       </Position24>
       <Position25>
         <Filename Value="main.pas"/>
-        <Caret Line="106" Column="36" TopLine="88"/>
+        <Caret Line="242" Column="3" TopLine="239"/>
       </Position25>
       <Position26>
-        <Filename Value="pixels.pas"/>
-        <Caret Line="165" TopLine="74"/>
+        <Filename Value="imagenodes.pas"/>
+        <Caret Line="81" Column="15" TopLine="63"/>
       </Position26>
       <Position27>
-        <Filename Value="pixels.pas"/>
-        <Caret Line="77" TopLine="55"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="242" Column="3" TopLine="239"/>
       </Position27>
       <Position28>
-        <Filename Value="pixels.pas"/>
-        <Caret Line="76" Column="17" TopLine="44"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="265" Column="25" TopLine="246"/>
       </Position28>
       <Position29>
-        <Filename Value="pixels.pas"/>
-        <Caret Line="81" Column="23" TopLine="65"/>
+        <Filename Value="main.pas"/>
+        <Caret Line="99" Column="3" TopLine="94"/>
       </Position29>
       <Position30>
         <Filename Value="pixels.pas"/>
+        <Caret Line="389" Column="31" TopLine="359"/>
       </Position30>
     </JumpHistory>
     <RunParams>

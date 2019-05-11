@@ -73,10 +73,69 @@ begin
   end;
 end;
 
-procedure WhiteOperation(var Pixel: TPixel; X, Y: Integer; Level: Single);
+function Hue(Value: Single): TPixel;
+const
+  Step = 1 / 6;
+var
+  R, G, B: Single;
 begin
-  Pixel := Mix(Pixel, White, Level);
+  R := 0;
+  G := 0;
+  B := 0;
+  if Value < 0 then
+    R := 1
+  else if Value < 1 * Step then
+  begin
+    R := 1;
+    G := Value / Step;
+  end
+  else if Value < 2 * Step then
+  begin
+    R := 1 - (Value - 1 * Step) / Step;
+    G := 1;
+  end
+  else if Value < 3 * Step then
+  begin
+    G := 1;
+    B := (Value - 2 * Step) / Step;
+  end
+  else if Value < 4 * Step then
+  begin
+    G := 1 - (Value - 3 * Step) / Step;
+    B :=  1;
+  end
+  else if Value < 5 * Step then
+  begin
+    B :=  1;
+    R := (Value - 4 * Step) / Step;
+  end
+  else if Value < 6 * Step then
+  begin
+    B := 1 - (Value - 5 * Step) / Step;
+    R := 1;
+  end
+  else
+    R := 1;
+  Result.R := RoundByte(R * $FF);
+  Result.G := RoundByte(G * $FF);
+  Result.B := RoundByte(B * $FF);
+  Result.A := $FF;
 end;
+
+{ Operation procedures }
+
+procedure InvertOperation(var Pixel: TPixel; X, Y: Integer; Level: Single);
+var
+  P: TPixel;
+begin
+  P.B := not Pixel.B;
+  P.G := not Pixel.G;
+  P.R := not Pixel.R;
+  P.A := Pixel.A;
+  Pixel := Mix(Pixel, P, Level);
+end;
+
+{ Blend procedures }
 
 procedure OpacityBlend(const A, B: TPixel; var Pixel: TPixel; X, Y: Integer; Level: Single);
 begin
@@ -87,7 +146,7 @@ end;
 
 procedure InitializeOperations(Add: TAddOperation);
 begin
-  Add('White', WhiteOperation);
+  Add('Invert', InvertOperation);
 end;
 
 procedure InitializeBlends(Add: TAddBlend);

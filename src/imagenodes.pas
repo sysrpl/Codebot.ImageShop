@@ -357,7 +357,6 @@ begin
   end
   else if CanConnect(Value) then
   begin
-
     if FConnect <> nil then
     begin
       if FConnect.FConnect <> nil then
@@ -956,7 +955,7 @@ begin
           Canvas.LineTo(P.X, P.Y);
           P := OutputPin[I].Connect.FLocation;
           P.X := P.X - GridSize;
-          Canvas.LineTo(P);
+          Canvas.LineTo(P.X, P.Y);
           Canvas.Brush.Color := Canvas.Pen.Color;
           Canvas.Rectangle(P.X, P.Y * (I + 1) - GridSize div 2 + 2,
             P.X + GridSize - 2, P.Y * (I + 1) + GridSize div 2 - 1);
@@ -1208,7 +1207,9 @@ procedure TImageNode.LoadImage(const FileName: string);
 var
   P: TPicture;
   A, B: PPixel;
+  {$ifdef linux}
   C: Byte;
+  {$endif}
   I: Integer;
 begin
   P := TPicture.Create;
