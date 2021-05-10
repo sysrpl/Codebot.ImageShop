@@ -4,7 +4,7 @@ A visual node based image manipulation program.
 ## What is Image Shop?
 Image Shop is a cross platform teaching application that allows students to write programming functions and see the results.
 
-Ater a student write a function, they can run the Image Shop program, drop their image function on a canvas, and visually connect it to other functions or images. Many functions can be combined to create new and interesteing image effects
+After a student writes a function, they can run the Image Shop program, drop their image function on a canvas, and visually connect it to other functions or images. Many functions can be combined to create new and interesteing image effects
 
 This program is part of a greater computer programming studies course taught to children using resources and tools from the [getlazarus website](https://www.getlazarus.org/learn/).
 
