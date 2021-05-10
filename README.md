@@ -8,6 +8,8 @@ Ater a student write a function, they can run the Image Shop program, drop their
 
 This program is part of a greater computer programming studies course taught to children using resources and tools from the [getlazarus website](https://www.getlazarus.org/learn/).
 
+https://user-images.githubusercontent.com/1647932/117630628-64fd8f80-b149-11eb-8fe4-a273e9706c47.mp4
+
 ## See Also
 
 [**Codebot.SoundShop**](https://github.com/sysrpl/Codebot.SoundShop/) a similar program where students can write programming functions generating muscial effects and tone.
