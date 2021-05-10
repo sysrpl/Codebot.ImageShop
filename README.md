@@ -1,10 +1,13 @@
-# Image Shop
-A visual node based image manipulation program
+# Codebot.ImageShop
+A visual node based image manipulation program.
 
-# What is Image Shop?
-Image Shop is a small teaching application that allows students to write functions using the Free Pascal language and see the results.
+## What is Image Shop?
+Image Shop is a cross platform teaching application that allows students to write programming functions and see the results.
 
-After a student write a function, they can run the Image Shop program and drop it on a canvas and connect it to other functions or images. Many functions can be combined to create new and interesteding image effects.
+Ater a student write a function, they can run the Image Shop program, drop their image function on a canvas, and visually connect it to other functions or images. Many functions can be combined to create new and interesteing image effects
 
-Image Shop can run on any platform. Prebuilt binaries and a short introduction video [are located here](https://www.getlazarus.org/learn/tutorials/examples/imageshop/).
+This program is part of a greater computer programming studies course taught to children using resources and tools from the [getlazarus website](https://www.getlazarus.org/learn/).
 
+## See Also
+
+[**Codebot.SoundShop**](https://github.com/sysrpl/Codebot.SoundShop/) a similar program where students can write programming functions generating muscial effects and tone.
